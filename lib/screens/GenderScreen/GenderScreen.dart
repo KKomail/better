@@ -1,5 +1,7 @@
 import "package:flutter/material.dart"; 
 
+//TODO: Implement this somewhere? 
+
 class GenderScreen extends StatefulWidget { 
   const GenderScreen({super.key}); 
 
@@ -22,7 +24,7 @@ class _GenderScreenState extends State<GenderScreen> {
         child: Column( 
           mainAxisAlignment: MainAxisAlignment.center, 
           children: [ 
-            Text( 
+            const Text( 
               'Select Your Gender', 
               style: TextStyle( 
                 color: Colors.white, 
@@ -30,7 +32,7 @@ class _GenderScreenState extends State<GenderScreen> {
                 fontWeight: FontWeight.bold 
               ), 
             ), 
-            SizedBox(height: 20), 
+            const SizedBox(height: 20), 
             RadioListTile<String>( 
               title: const Text('Male', style: TextStyle(color: Colors.white)), 
               value: 'Male', 
@@ -64,17 +66,17 @@ class _GenderScreenState extends State<GenderScreen> {
               }, 
               activeColor: Colors.blue, 
             ), 
-            SizedBox(height: 40), 
+            const SizedBox(height: 40), 
             ElevatedButton( 
               onPressed: () { 
                 // Handle the next action, e.g., save the selected gender
                 print('Selected Gender: $selectedGender'); 
               }, 
-              child: const Text('Continue'), 
               style: ElevatedButton.styleFrom( 
                 backgroundColor: Colors.blue, 
                 padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15), 
               ), 
+              child: const Text('Continue'), 
             ), 
           ], 
         ), 

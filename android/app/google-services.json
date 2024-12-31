@@ -1,0 +1,50 @@
+{
+  "project_info": {
+    "project_number": "138982305624",
+    "project_id": "better-96f2e",
+    "storage_bucket": "better-96f2e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:138982305624:android:191847b72577bd73e73f2d",
+        "android_client_info": {
+          "package_name": "com.komail.better"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "138982305624-vm9ktjrvovegh6pcbvs5hqffl48bphpt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.komail.better",
+            "certificate_hash": "79cae1dc1ddb3084ae3313d44d56fae0b60bec1c"
+          }
+        },
+        {
+          "client_id": "138982305624-sl8a7d8jhl2onrpvtcam298t24jm9q48.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBvLKy9hwwjroSmFMeY64EZvR2yh2GLB6s"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "138982305624-sl8a7d8jhl2onrpvtcam298t24jm9q48.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+
+  
+}
+

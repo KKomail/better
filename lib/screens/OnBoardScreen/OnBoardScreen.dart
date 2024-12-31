@@ -87,7 +87,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                       // TODO: define routes before creating a navigator 
                       // TODO: Create a page in the routes folder that creates certain routes 
                       // for navigation 
-                      Navigator.pushReplacementNamed(context, AppRoutes.genderScreen); 
+                      Navigator.pushReplacementNamed(context, AppRoutes.signUpScreen); 
                     },  
                     child: const Text('Get Started'),
                   ),
@@ -131,7 +131,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                             fontSize: 24,
                             fontWeight: FontWeight.bold)),
                     Text(title,
-                        style: TextStyle(
+                        style: const TextStyle(
                             color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.bold)),
@@ -141,7 +141,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 // Description with Constraints
                 Text(
                   description,
-                  style: TextStyle(color: Colors.white70, fontSize: 16),
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
                   maxLines: 3, // Limit lines to avoid overflow
                   overflow:
                       TextOverflow.ellipsis, // Add ellipsis if text overflows
