@@ -4,8 +4,7 @@ import '../screens/OnBoardScreen/OnBoardScreen.dart';
 import '../screens/SignUpScreen/SignUpScreen.dart'; 
 import '../screens/WorkoutPlan/WorkoutListScreen.dart'; 
 
-//TODO: 
-//Define More Routes 
+//TODO: Define More Routes  
 
 class AppRoutes { 
   //This goes to the home page(onboarding screen) 

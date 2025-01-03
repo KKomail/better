@@ -87,7 +87,7 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                       // TODO: define routes before creating a navigator 
                       // TODO: Create a page in the routes folder that creates certain routes 
                       // for navigation 
-                      Navigator.pushReplacementNamed(context, AppRoutes.signUpScreen); 
+                      Navigator.pushReplacementNamed(context, AppRoutes.workoutListScreen); 
                     },  
                     child: const Text('Get Started'),
                   ),
