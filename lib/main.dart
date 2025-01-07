@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'routes/app_routes.dart'; // Import your routes
 
+// TODO: Implement Navigation (use routes) 
+
 void main() {
   runApp(const MyApp());
 }
@@ -14,7 +16,8 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       color: Colors.black,
       debugShowCheckedModeBanner: false,
-      initialRoute: AppRoutes.onboarding, // Set initial route to OnBoardScreen
+      //initialRoute: AppRoutes.onboarding, // Set initial route to OnBoardScreen
+      initialRoute: AppRoutes.exerciseLibrary, 
       routes: AppRoutes.getRoutes(), // Use the getRoutes method from AppRoutes
     );
   }
@@ -22,7 +25,7 @@ class MyApp extends StatelessWidget {
 
 // Example MainApp class with Bottom Navigation Bar
 class MainApp extends StatefulWidget {
-  const MainApp({Key? key}) : super(key: key);
+  const MainApp({super.key});
 
   @override
   _MainAppState createState() => _MainAppState();
@@ -68,8 +71,10 @@ class _MainAppState extends State<MainApp> {
 
 // Example placeholder screens
 class ProfileScreen extends StatelessWidget {
+  const ProfileScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Profile Screen'));
+    return const Center(child: Text('Profile Screen'));
   }
 }
