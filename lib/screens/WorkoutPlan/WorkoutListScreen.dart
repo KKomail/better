@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-// TODO: 
-// Change the structure of adding exercises, sets, reps, and weight (add sets individually instead of all in one.) 
-// Add a Exercise List (try using API so that users can see which exercises to add)  
-//
-// Create an exercise library 
-
-// Model class for Exercise
 class Exercise {
   final String name;
   int sets;
   int reps;
   double weight;
+  // RPE? 
 
   Exercise(this.name, {this.sets = 1, this.reps = 1, this.weight = 0.0});
 }

@@ -9,7 +9,7 @@ import '../screens/MacroTrackerScreen/MacroTrackerScreen.dart';
 
 class AppRoutes { 
   //This goes to the home page(onboarding screen) 
-  static const String onboarding = '/'; 
+  static const String onboarding = '/onboarding'; 
   //This goes to gender Select screen (for set up profile) 
   static const String genderScreen = '/GenderScreen'; // Do I need this? Wldnt it be better to just create a profile customization page?  
   //This goes to Google Sign in 

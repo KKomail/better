@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'routes/app_routes.dart'; // Import your routes
-
-// TODO: Implement Navigation (use routes) 
+import 'screens/WorkoutPlan/WorkoutListScreen.dart'; 
+import 'screens/MacroTrackerScreen/MacroTrackerScreen.dart'; 
+import 'endpoints/ExerciseLibraryScreen.dart'; 
 
 void main() {
   runApp(const MyApp());
@@ -16,14 +17,19 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       color: Colors.black,
       debugShowCheckedModeBanner: false,
-      //initialRoute: AppRoutes.onboarding, // Set initial route to OnBoardScreen
-      initialRoute: AppRoutes.exerciseLibrary, 
-      routes: AppRoutes.getRoutes(), // Use the getRoutes method from AppRoutes
+      initialRoute: AppRoutes.onboarding, // Set initial route to OnBoardScreen
+      //home: MainApp(), 
+      routes: { 
+        ...AppRoutes.getRoutes(), 
+        '/main': (context) => MainApp(), 
+      }
+
     );
   }
 }
 
-// Example MainApp class with Bottom Navigation Bar
+
+// BottomNavigationBar
 class MainApp extends StatefulWidget {
   const MainApp({super.key});
 
@@ -35,8 +41,12 @@ class _MainAppState extends State<MainApp> {
   int _selectedIndex = 0;
 
   final List<Widget> _screens = [
-    //WorkoutListScreen(), // Replace with your actual screens
-    //ProfileScreen(),     // Add more screens as needed
+    WorkoutListScreen(),   
+    ExerciseLibraryScreen(),
+    MacronutrientTrackerPage(),
+    //add more screens here 
+    // Profile Screen 
+    // AI Workout Screen 
   ];
 
   void _onItemTapped(int index) {
@@ -56,6 +66,15 @@ class _MainAppState extends State<MainApp> {
             label: 'Workout',
           ),
           BottomNavigationBarItem(
+            icon: Icon(Icons.book),
+            label: 'Exercise Library',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.restaurant),
+            label: 'Macro Tracker',
+          ),
+          BottomNavigationBarItem(
+            //Have not created a profile screen yet 
             icon: Icon(Icons.person),
             label: 'Profile',
           ),
@@ -66,15 +85,5 @@ class _MainAppState extends State<MainApp> {
         unselectedItemColor: Colors.grey,
       ),
     );
-  }
-}
-
-// Example placeholder screens
-class ProfileScreen extends StatelessWidget {
-  const ProfileScreen({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Center(child: Text('Profile Screen'));
   }
 }

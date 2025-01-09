@@ -83,11 +83,8 @@ class _OnBoardScreenState extends State<OnBoardScreen> {
                 if (_currentPage == _pages.length - 1)
                   ElevatedButton(
                     onPressed: () {
-                      // Navigate to the main app or home screen
-                      // TODO: define routes before creating a navigator 
-                      // TODO: Create a page in the routes folder that creates certain routes 
-                      // for navigation 
-                      Navigator.pushReplacementNamed(context, AppRoutes.workoutListScreen); 
+                      //Navigate to Home 
+                      Navigator.pushReplacementNamed(context, '/main'); 
                     },  
                     child: const Text('Get Started'),
                   ),
