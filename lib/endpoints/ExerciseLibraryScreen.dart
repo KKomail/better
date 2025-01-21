@@ -3,8 +3,6 @@ import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 
-// TODO: Try make this work?? 
-
 class ExerciseLibraryScreen extends StatefulWidget {
   @override
   _ExerciseLibraryScreenState createState() => _ExerciseLibraryScreenState();
@@ -48,6 +46,7 @@ class _ExerciseLibraryScreenState extends State<ExerciseLibraryScreen> {
               itemBuilder: (context, index) {
                 return ListTile(
                   title: Text(_exercises[index]['name']),
+                  // TODO: Clickable cards that return the description of workout
                   //subtitle: Text(_exercises[index]['description']),
                 );
               },

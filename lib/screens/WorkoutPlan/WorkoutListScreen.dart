@@ -1,26 +1,30 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 
-class Exercise {
-  final String name;
-  int sets;
+// TODO: Store in back end (dbs) 
+
+class Set {
   int reps;
   double weight;
-  // RPE? 
-
-  Exercise(this.name, {this.sets = 1, this.reps = 1, this.weight = 0.0});
+  Set({required this.reps, required this.weight});
 }
 
-// Model class for Workout
+class Exercise {
+  final String name;
+  List<Set> sets;
+
+  Exercise(this.name, {required this.sets});
+}
+
 class Workout {
   final String name;
   final List<Exercise> exercises;
-  final int duration; // Duration in seconds
+  final int duration; // in seconds
+  final DateTime date;
 
-  Workout(this.name, this.exercises, this.duration);
+  Workout(this.name, this.exercises, this.duration) : date = DateTime.now();
 }
 
-// Main screen to display workouts and add new ones
 class WorkoutListScreen extends StatefulWidget {
   const WorkoutListScreen({super.key});
 
@@ -42,50 +46,63 @@ class _WorkoutListScreenState extends State<WorkoutListScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('My Workouts'),
+        backgroundColor: Colors.teal,
       ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ListView.builder(
-              itemCount: workouts.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  margin: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    title: Text(workouts[index].name),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ...workouts[index].exercises.map((exercise) {
-                          return Text('${exercise.name}: ${exercise.sets} sets x ${exercise.reps} reps @ ${exercise.weight} kg');
-                        }),
-                        Text('Total Duration: ${workouts[index].duration ~/ 60} min ${workouts[index].duration % 60} sec'),
-                      ],
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView.builder(
+          itemCount: workouts.length,
+          itemBuilder: (context, index) {
+            return Card(
+              margin: const EdgeInsets.symmetric(vertical: 8.0),
+              elevation: 4,
+              child: ListTile(
+                title: Text(workouts[index].name, 
+                    style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                subtitle: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Date: ${workouts[index].date.toLocal().toString().split(' ')[0]}',
+                      style: TextStyle(color: Colors.grey[600]),
                     ),
-                  ),
-                );
-              },
-            ),
-          ),
-          ElevatedButton(
-            onPressed: () async {
-              final newWorkout = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => AddWorkoutScreen()),
-              );
-              if (newWorkout != null) {
-                _addWorkout(newWorkout);
-              }
-            },
-            child: const Text('+ Start New Workout'),
-          ),
-        ],
+                    const SizedBox(height: 5),
+                    const Text(
+                      'Exercises',
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    ...workouts[index].exercises.map((exercise) {
+                      double bestWeight = exercise.sets.isNotEmpty
+                          ? exercise.sets.map((s) => s.weight).reduce((a, b) => a > b ? a : b)
+                          : 0.0;
+
+                      return Text('${exercise.name}: Best Set @ ${bestWeight} kg');
+                    }),
+                    Text('Total Duration: ${workouts[index].duration ~/ 60} min ${workouts[index].duration % 60} sec'),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          final newWorkout = await Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddWorkoutScreen()),
+          );
+          if (newWorkout != null) {
+            _addWorkout(newWorkout);
+          }
+        },
+        backgroundColor: Colors.teal,
+        child: const Icon(Icons.add),
       ),
     );
   }
 }
 
-// Screen to add a new workout
 class AddWorkoutScreen extends StatefulWidget {
   const AddWorkoutScreen({super.key});
 
@@ -95,22 +112,23 @@ class AddWorkoutScreen extends StatefulWidget {
 
 class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
   final TextEditingController _workoutNameController = TextEditingController();
-  final List<Exercise> _exercises = [];
-  
   final TextEditingController _exerciseNameController = TextEditingController();
-  final TextEditingController _setsController = TextEditingController();
   final TextEditingController _repsController = TextEditingController();
   final TextEditingController _weightController = TextEditingController();
 
+  final List<Exercise> _exercises = [];
+  final List<Set> _currentSets = [];
   late Timer _timer;
   int _elapsedTime = 0; // Time in seconds
-  bool _isRunning = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _startTimer();
+  }
 
   void _startTimer() {
-    setState(() {
-      _isRunning = true;
-      _elapsedTime = 0; // Reset elapsed time
-    });
+    _elapsedTime = 0; // Reset elapsed time
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
         _elapsedTime++;
@@ -119,46 +137,48 @@ class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
   }
 
   void _stopTimer() {
-    setState(() {
-      _isRunning = false;
-    });
     _timer.cancel();
   }
 
-  void _addExercise() {
-    if (_exerciseNameController.text.isNotEmpty &&
-        _setsController.text.isNotEmpty &&
-        _repsController.text.isNotEmpty &&
-        _weightController.text.isNotEmpty) {
-
+  void _addSet() {
+    if (_repsController.text.isNotEmpty && _weightController.text.isNotEmpty) {
       setState(() {
-        final exercise = Exercise(
-          _exerciseNameController.text,
-          sets: int.parse(_setsController.text),
+        final set = Set(
           reps: int.parse(_repsController.text),
           weight: double.parse(_weightController.text),
         );
-        _exercises.add(exercise);
-        // Clear the input fields after adding an exercise
-        _exerciseNameController.clear();
-        _setsController.clear();
+        _currentSets.add(set);
         _repsController.clear();
         _weightController.clear();
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Please fill all fields.'),
+        content: Text('Please enter reps and weight.'),
+      ));
+    }
+  }
+
+  void _saveExercise() {
+    if (_exerciseNameController.text.isNotEmpty && _currentSets.isNotEmpty) {
+      setState(() {
+        final exercise = Exercise(
+          _exerciseNameController.text,
+          sets: List.from(_currentSets),
+        );
+        _exercises.add(exercise);
+        _currentSets.clear();
+        _exerciseNameController.clear();
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Please enter an exercise name and at least one set.'),
       ));
     }
   }
 
   void _saveWorkout() {
     if (_workoutNameController.text.isNotEmpty && _exercises.isNotEmpty) {
-      // Stop the timer before saving the workout
-      if (_isRunning) {
-        _stopTimer();
-      }
-      
+      _stopTimer();
       Navigator.pop(context, Workout(_workoutNameController.text, _exercises, _elapsedTime));
     } else {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -172,6 +192,7 @@ class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Add New Workout'),
+        backgroundColor: Colors.teal,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -182,75 +203,59 @@ class _AddWorkoutScreenState extends State<AddWorkoutScreen> {
               decoration: const InputDecoration(labelText: 'Workout Name'),
             ),
             const SizedBox(height: 10),
-            if (_isRunning)
-              Text('Elapsed Time: ${_elapsedTime ~/ 60}:${(_elapsedTime % 60).toString().padLeft(2, '0')}',
+            Text('Elapsed Time: ${_elapsedTime ~/ 60}:${(_elapsedTime % 60).toString().padLeft(2, '0')}',
                   style: const TextStyle(fontSize: 20)),
-            const SizedBox(height:10),
-            Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _exerciseNameController,
-                    decoration:
-                        const InputDecoration(labelText: 'Exercise Name'),
-                  ),
-                ),
-                const SizedBox(width:10),
-                Expanded(
-                  child: TextField(
-                    controller:_setsController,
-                    decoration:
-                        const InputDecoration(labelText:'Sets', hintText:'e.g.3'), // This should display the previous set record
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal:false),
-                  ),
-                ),
-                const SizedBox(width:10),
-                Expanded(
-                  child: TextField(
-                    controller:_repsController,
-                    decoration:
-                        const InputDecoration(labelText:'Reps', hintText:'e.g.10'), // This should display the previous rep record
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal:false),
-                  ),
-                ),
-                const SizedBox(width:10),
-                Expanded(
-                  child: TextField(
-                    controller:_weightController,
-                    decoration:
-                        const InputDecoration(labelText:'Weight (kg)', hintText:'e.g.20'), // This should display the previous weight PR 
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal:true),
-                  ),
-                ),
-              ],
+            const SizedBox(height: 10),
+            TextField(
+              controller: _exerciseNameController,
+              decoration: const InputDecoration(labelText: 'Exercise Name'),
             ),
-            const SizedBox(height :10),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _repsController,
+              decoration: const InputDecoration(labelText: 'Reps'),
+              keyboardType: TextInputType.number,
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: _weightController,
+              decoration: const InputDecoration(labelText: 'Weight (kg)'),
+              keyboardType: TextInputType.numberWithOptions(decimal: true),
+            ),
+            const SizedBox(height: 10),
             ElevatedButton(
-              onPressed:_addExercise,
-              child :const Text('Add Exercise')
+              onPressed: _addSet,
+              child: const Text('Add Set'),
+              style: ElevatedButton.styleFrom(foregroundColor: Colors.teal),
             ),
+            const SizedBox(height: 10),
             Expanded(
-              child : ListView.builder(
-                itemCount:_exercises.length,
-                itemBuilder:(context,index){
-                  return Card(child:
-                  ListTile(title:
-                  Text('${_exercises[index].name}: ${_exercises[index].sets} sets x ${_exercises[index].reps} reps @ ${_exercises[index].weight} kg')));
+              child: ListView.builder(
+                itemCount: _currentSets.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    margin: const EdgeInsets.symmetric(vertical: 4.0),
+                    child: ListTile(
+                      title: Text('Set ${index + 1}: ${_currentSets[index].reps} reps @ ${_currentSets[index].weight} kg'),
+                    ),
+                  );
                 },
-              )
+              ),
             ),
             ElevatedButton(
-              onPressed:_saveWorkout,
-              child :const Text('Finish Workout')
-            )
+              onPressed: _saveExercise,
+              child: const Text('Save Exercise'),
+              style: ElevatedButton.styleFrom(foregroundColor: Colors.teal),
+            ),
+            const SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: _saveWorkout,
+              child: const Text('Finish Workout'),
+              style: ElevatedButton.styleFrom(foregroundColor: Colors.teal),
+            ),
           ],
         ),
       ),
-      floatingActionButton:_isRunning ? FloatingActionButton.extended(onPressed:_stopTimer,label :const Text('Stop Timer')) :
-       FloatingActionButton.extended(onPressed:_startTimer,label :const Text('Start Timer')),
     );
   }
 }
