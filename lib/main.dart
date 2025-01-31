@@ -1,3 +1,4 @@
+import 'package:better/screens/WorkoutPlan/GenerateWorkoutScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'routes/app_routes.dart'; // Import your routes

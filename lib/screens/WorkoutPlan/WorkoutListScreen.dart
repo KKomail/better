@@ -1,7 +1,10 @@
+import 'package:better/screens/WorkoutPlan/GenerateWorkoutScreen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
 // TODO: Store in back end (dbs) 
+// TODO: The issue of when clicking on the back button to the home screen 
+// while the workout has begun completely erases the current workout : optional issue to be fixed
 
 class Set {
   int reps;
@@ -86,19 +89,35 @@ class _WorkoutListScreenState extends State<WorkoutListScreen> {
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          final newWorkout = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddWorkoutScreen()),
-          );
-          if (newWorkout != null) {
-            _addWorkout(newWorkout);
-          }
-        },
-        backgroundColor: Colors.teal,
-        child: const Icon(Icons.add),
-      ),
+       floatingActionButton: Column(
+  mainAxisAlignment: MainAxisAlignment.end,
+  children: [
+    FloatingActionButton(
+      onPressed: () async {
+        final newWorkout = await Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const AddWorkoutScreen()),
+        );
+        if (newWorkout != null) {
+          _addWorkout(newWorkout);
+        }
+      },
+      backgroundColor: Colors.teal,
+      child: const Icon(Icons.add),
+    ),
+    const SizedBox(height: 10),
+    FloatingActionButton(
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const GenerateWorkoutScreen()),
+        );
+      },
+      backgroundColor: Colors.orange,
+      child: const Icon(Icons.auto_awesome),
+    ),
+  ],
+),
     );
   }
 }

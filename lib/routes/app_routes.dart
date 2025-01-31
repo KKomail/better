@@ -4,6 +4,7 @@ import '../screens/OnBoardScreen/OnBoardScreen.dart';
 import '../screens/WorkoutPlan/WorkoutListScreen.dart'; 
 import '../endpoints/ExerciseLibraryScreen.dart'; 
 import '../screens/MacroTrackerScreen/MacroTrackerScreen.dart'; 
+import '../screens/WorkoutPlan/GenerateWorkoutScreen.dart'; // AI screen 
 
 class AppRoutes { 
   // Only the initial route if user is not logged in? 
@@ -20,6 +21,8 @@ class AppRoutes {
   //MacroNutrientTracker Screen 
   static const String macroTracker = '/MacroTrackerScreen'; 
 
+  static const String generateWorkout = '/GenerateWorkoutScreen'; 
+
   static Map<String, WidgetBuilder> getRoutes() { 
       return { 
           onboarding: (context) => const OnBoardScreen(), 
@@ -28,6 +31,7 @@ class AppRoutes {
           workoutListScreen: (context) => WorkoutListScreen(), 
           exerciseLibrary: (context) => ExerciseLibraryScreen(), 
           macroTracker: (context) => MacronutrientTrackerPage(), 
+          generateWorkout: (context) => GenerateWorkoutScreen(), 
         }; 
     }
 } 
